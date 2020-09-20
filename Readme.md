@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Natalia Protasova](https://up.htmlacademy.ru/javascript/21/user/1493301).
-* Наставник: `Неизвестно`.
+* Наставник: [Юлия Корецкая](https://htmlacademy.ru/profile/id11886).
 
 ---
 
