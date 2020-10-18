@@ -22,8 +22,6 @@
     bungalow: `Бунгало`
   };
 
-
-
   //  случайное число в интервале от min до max
   const getRandomNumber = function (min, max) {
     return Math.floor(min + Math.random() * (max + 1 - min));
@@ -112,15 +110,13 @@
     return cardFragment;
   };
 
-// Окно информацией об объявлении
+  // Окно информацией об объявлении
   const makeCard = function (data) {
     const cardTemplate = document.querySelector(`#card`).content;
     const cardElement = cardTemplate.cloneNode(true);
     const cardFragment = document.createDocumentFragment();
     const {title, address, price, type, rooms, guests, checkin, checkout, features, description, photos} = data.offer;
     const {avatar} = data.author;
-
-
 
     const cardFeaturesContainer = cardElement.querySelector(`.popup__features`);
     cardFeaturesContainer.innerHTML = ``;
@@ -139,7 +135,6 @@
       cardPhotos.appendChild(cardFragment);
     };
 
-    const cardType = cardElement.querySelector(`.popup__type`);
     cardElement.querySelector(`.popup__type`).textContent = type ? OFFER_RUS[type] : ``;
     cardElement.querySelector(`.popup__title`).textContent = title;
     cardElement.querySelector(`.popup__text--address`).textContent = address;
