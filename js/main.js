@@ -19,17 +19,17 @@
 
   // пишет перечисление
   const PinLocation = {
-    XMIN: 0,
-    XMAX: pinsArea.clientWidth,
-    YMIN: 130,
-    YMAX: 630
+    X_MIN: 0,
+    X_MAX: pinsArea.clientWidth,
+    Y_MIN: 130,
+    Y_MAX: 630
   };
 
   const OfferRus = {
-    palace: `Дворец`,
-    flat: `Квартира`,
-    house: `Дом`,
-    bungalow: `Бунгало`
+    PALACE: `Дворец`,
+    FLAT: `Квартира`,
+    HOUSE: `Дом`,
+    BUNGALOW: `Бунгало`
   };
 
   const getRandomNumber = function (min, max) {
@@ -46,8 +46,8 @@
   };
 
   const getRandomLocation = function () {
-    const locationX = getRandomNumber(PinLocation.XMIN, PinLocation.XMAX);
-    const locationY = getRandomNumber(PinLocation.YMIN, PinLocation.YMAX);
+    const locationX = getRandomNumber(PinLocation.X_MIN, PinLocation.X_MAX);
+    const locationY = getRandomNumber(PinLocation.Y_MIN, PinLocation.Y_MAX);
     return `${locationX}, ${locationY}`;
   };
 
@@ -59,8 +59,8 @@
           avatar: `img/avatars/user0${i}.png`,
         },
         location: {
-          x: getRandomNumber(PinLocation.XMIN, PinLocation.XMAX),
-          y: getRandomNumber(PinLocation.YMIN, PinLocation.YMAX),
+          x: getRandomNumber(PinLocation.X_MIN, PinLocation.X_MAX),
+          y: getRandomNumber(PinLocation.Y_MIN, PinLocation.Y_MAX),
         },
         offer: {
           title: `Отличный вариант для путешествия ...`,
@@ -100,7 +100,7 @@
   };
 
   const pinAdd = getPinAdd();
-  pinsArea.append(createPinAdd(pinAdd));
+
 
   const makeFeatures = function (cardFeatures, cardFragment) {
     cardFeatures.forEach((feature) => {
@@ -112,7 +112,7 @@
   };
 
   // Окно информацией об объявлении
-  const makeCard = function (data) {
+    const makeCard = function (data) {
     const cardTemplate = document.querySelector(`#card`).content;
     const cardElement = cardTemplate.cloneNode(true);
     const cardFragment = document.createDocumentFragment();
@@ -151,12 +151,12 @@
     return cardElement;
   };
 
-  let mapFilterContainer = document.querySelector(`.map__filters-container`);
-  housesMap.insertBefore(makeCard(pinAdd[0]), mapFilterContainer);
+  const mapFilterContainer = document.querySelector(`.map__filters-container`);
 
-  let form = document.querySelector(`.ad-form`);
-  let formDisabled = document.querySelectorAll(`.ad-form--disabled fieldset`);
-  let mapFilter = document.querySelector(`.map__filters`).children;
+
+  const form = document.querySelector(`.ad-form`);
+  const formDisabled = document.querySelectorAll(`.ad-form--disabled fieldset`);
+  const mapFilter = document.querySelector(`.map__filters`).children;
 
   formDisabled.forEach((element) => element.setAttribute(`disabled`, `disabled`));
 
@@ -164,32 +164,34 @@
     mapFilter[i].setAttribute(`disabled`, `disabled`);
   }
 
-  let mainPin = document.querySelector(`.map__pin--main`);
+  const mainPin = document.querySelector(`.map__pin--main`);
 
-  function disableForm() {
+  function activateForm() {
     document.querySelector(`.map`).classList.remove(`map--faded`);
     for (let i = 0; i < mapFilter.length; i++) {
       mapFilter[i].removeAttribute(`disabled`);
     }
     form.classList.remove(`ad-form--disabled`);
     formDisabled.forEach((element) => element.removeAttribute(`disabled`));
+    pinsArea.append(createPinAdd(pinAdd));
+    housesMap.insertBefore(makeCard(pinAdd[0]), mapFilterContainer);
   }
 
-  let addressInput = document.getElementsByName(`address`);
+  const addressInput = document.getElementsByName(`address`);
   addressInput[0].setAttribute(`readonly`, `readonly`);
   addressInput[0].value = PIN_WIDTH / 2 + Number(mainPin.style.left.slice(0, -2)) + `, ` + (PIN_WIDTH / 2 + Number(mainPin.style.top.slice(0, -2)));
 
 
   mainPin.addEventListener(`mousedown`, function (evt) {
     if (evt.button === 0) {
-      disableForm();
+      activateForm();
       addressInput[0].value = PIN_WIDTH / 2 + Number(mainPin.style.left.slice(0, -2)) + `, ` + (PIN_HEIGHT + Number(mainPin.style.top.slice(0, -2)));
     }
   });
 
   mainPin.addEventListener(`keydown`, function (evt) {
     if (evt.key === `Enter`) {
-      disableForm();
+      activateForm();
       addressInput[0].value = PIN_WIDTH / 2 + Number(mainPin.style.left.slice(0, -2)) + `, ` + (PIN_HEIGHT + Number(mainPin.style.top.slice(0, -2)));
     }
   });
@@ -197,7 +199,7 @@
   const addRoomsAmount = document.querySelector(`#room_number`);
   const addGuestsAmount = document.querySelector(`#capacity`);
 
-  let checkRoomsNumber = function (roomsAmount) {
+  const checkRoomsNumber = function (roomsAmount) {
     switch (roomsAmount) {
       case `1`:
         roomsAmount = 1;
@@ -215,7 +217,7 @@
     return roomsAmount;
   };
 
-  let checkGuestsNumber = function (guestsAmount) {
+  const checkGuestsNumber = function (guestsAmount) {
     switch (guestsAmount) {
       case `1`:
         guestsAmount = 1;
@@ -233,7 +235,7 @@
     return guestsAmount;
   };
 
-  let checkGuestsValidity = function (roomsAmount, guestsAmount) {
+  const checkGuestsValidity = function (roomsAmount, guestsAmount) {
     switch (roomsAmount) {
       case 1:
         if (!(roomsAmount === guestsAmount)) {
@@ -266,8 +268,8 @@
   };
 
   const setGuestsValidity = function () {
-    let roomsNumber = checkRoomsNumber(addRoomsAmount.value);
-    let guestsNumber = checkGuestsNumber(addGuestsAmount.value);
+    const roomsNumber = checkRoomsNumber(addRoomsAmount.value);
+    const guestsNumber = checkGuestsNumber(addGuestsAmount.value);
     return checkGuestsValidity(roomsNumber, guestsNumber);
   };
 
