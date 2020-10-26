@@ -112,7 +112,7 @@
   };
 
   // Окно информацией об объявлении
-    const makeCard = function (data) {
+  const makeCard = function (data) {
     const cardTemplate = document.querySelector(`#card`).content;
     const cardElement = cardTemplate.cloneNode(true);
     const cardFragment = document.createDocumentFragment();
