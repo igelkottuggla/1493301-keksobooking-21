@@ -72,5 +72,4 @@
     mainPin.removeEventListener(`keydown`, onMainPinPressEnter);
     mainPin.removeEventListener(`mousedown`, onMainPinMouseButtonClick);
   };
-  //  pinsArea.append(createPinAdd(pinAdd));
 })();
