@@ -6,6 +6,7 @@
   const PIN_HEIGHT = 44;
 
   const pinsArea = document.querySelector(`.map__pins`);
+  const locationXMax = document.querySelector(`.map__pins`).clientWidth;
   const mainPin = pinsArea.querySelector(`.map__pin--main`);
 
   const mainPinAddressInput = addForm.querySelector(`#address`);
@@ -32,5 +33,8 @@
     assignAddress,
     pinsArea,
     mainPin,
+    locationXMax,
+    PIN_WIDTH,
+    PIN_HEIGHT,
   };
 })();
