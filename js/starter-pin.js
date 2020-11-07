@@ -2,8 +2,8 @@
 (function () {
   const {addForm} = window.form;
 
-  const PIN_WIDTH = 40;
-  const PIN_HEIGHT = 44;
+  const PIN_WIDTH = 60;
+  const PIN_HEIGHT = 64;
 
   const pinsArea = document.querySelector(`.map__pins`);
   const locationXMax = document.querySelector(`.map__pins`).clientWidth;
@@ -24,7 +24,8 @@
 
   const assignAddress = function () {
     const newPinPositionY = Math.floor(mainPin.offsetTop + PIN_HEIGHT);
-    mainPinAddressInput.value = `${mainPinsStartPosition.x}, ${newPinPositionY}`;
+    const newPinPositionX = Math.floor(mainPin.offsetLeft + PIN_WIDTH);
+    mainPinAddressInput.value = `${newPinPositionX}, ${newPinPositionY}`;
   };
 
   mainPinAddressInput.setAttribute(`readonly`, `true`);

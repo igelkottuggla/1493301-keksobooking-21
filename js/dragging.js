@@ -1,5 +1,5 @@
 'use strict';
-(() => {
+(function () {
   const {PIN_WIDTH, PIN_HEIGHT, assignAddress, locationXMax, mainPin} = window.starterPin;
   const {map} = window.map;
 
@@ -11,8 +11,8 @@
   const restrictions = {
     top: map.offsetTop + TOP_CURB - PIN_HEIGHT,
     bottom: BOTTOM_CURB - PIN_HEIGHT,
-    left: LEFT_CURB - PIN_WIDTH,
-    right: RIGHT_CURB + Math.round(PIN_WIDTH / 2) - PIN_WIDTH,
+    left: LEFT_CURB + Math.ceil(PIN_WIDTH / 2) - mainPin.offsetWidth,
+    right: RIGHT_CURB + Math.ceil(PIN_WIDTH / 2) - mainPin.offsetWidth,
   };
 
   const onStarterPinMouseMove = (evt) => {
@@ -23,7 +23,7 @@
       y: evt.clientY,
     };
 
-    const onMouseMovtion = (motionEvt) => {
+    const onMouseMotion = (motionEvt) => {
       motionEvt.preventDefault();
 
       const shift = {
@@ -41,20 +41,13 @@
         y: mainPin.offsetTop - shift.y,
       };
 
-      if (position.x < restrictions.left) {
-        position.x = restrictions.left;
-      } else if (position.x > restrictions.right) {
-        position.x = restrictions.right;
+      if (position.x >= restrictions.left && position.x <= restrictions.right) {
+        mainPin.style.left = `${position.x}px`;
       }
 
-      if (position.y < restrictions.top) {
-        position.y = restrictions.top;
-      } else if (position.y > restrictions.bottom) {
-        position.y = restrictions.bottom;
+      if (position.y >= restrictions.top && position.y <= restrictions.bottom) {
+        mainPin.style.top = `${position.y}px`;
       }
-
-      mainPin.style.top = `${position.y}px`;
-      mainPin.style.left = `${position.x}px`;
 
       assignAddress();
     };
@@ -62,11 +55,11 @@
     const onPinUp = (upEvt) => {
       upEvt.preventDefault();
 
-      document.removeEventListener(`mousemove`, onMouseMovtion);
+      document.removeEventListener(`mousemove`, onMouseMotion);
       document.removeEventListener(`mouseup`, onPinUp);
     };
 
-    document.addEventListener(`mousemove`, onMouseMovtion);
+    document.addEventListener(`mousemove`, onMouseMotion);
     document.addEventListener(`mouseup`, onPinUp);
   };
 
