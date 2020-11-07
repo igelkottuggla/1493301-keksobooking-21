@@ -8,6 +8,7 @@
   const {create} = window.pin;
   const {get} = window.data;
   const {isEnterEvent} = window.util;
+  const {onStarterPinMouseMove} = window.dragging;
 
   const formSelects = addForm.querySelectorAll(`select`);
   const formInputs = addForm.querySelectorAll(`input`);
@@ -71,5 +72,6 @@
     assignAddress();
     mainPin.removeEventListener(`keydown`, onMainPinPressEnter);
     mainPin.removeEventListener(`mousedown`, onMainPinMouseButtonClick);
+    mainPin.addEventListener(`mousedown`, onStarterPinMouseMove);
   };
 })();
