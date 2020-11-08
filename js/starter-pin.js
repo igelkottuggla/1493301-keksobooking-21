@@ -24,7 +24,7 @@
 
   const assignAddress = function () {
     const newPinPositionY = Math.floor(mainPin.offsetTop + PIN_HEIGHT);
-    const newPinPositionX = Math.floor(mainPin.offsetLeft + PIN_WIDTH);
+    const newPinPositionX = Math.floor(mainPin.offsetLeft + PIN_WIDTH / 2);
     mainPinAddressInput.value = `${newPinPositionX}, ${newPinPositionY}`;
   };
 
