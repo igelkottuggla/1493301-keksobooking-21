@@ -4,6 +4,8 @@
 
   const PIN_WIDTH = 60;
   const PIN_HEIGHT = 64;
+  const PIN_INCEPTION_X = 570;
+  const PIN_INCEPTION_Y = 375;
 
   const pinsArea = document.querySelector(`.map__pins`);
   const locationXMax = document.querySelector(`.map__pins`).clientWidth;
@@ -37,5 +39,8 @@
     locationXMax,
     PIN_WIDTH,
     PIN_HEIGHT,
+    PIN_INCEPTION_X,
+    PIN_INCEPTION_Y,
+    setMainPinPosition,
   };
 })();
