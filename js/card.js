@@ -1,7 +1,8 @@
 'use strict';
 (function () {
   const {isEscEvent} = window.util;
-  const {map} = window.map;
+  const map = document.querySelector(`.map`);
+
 
   const makeFeatures = function (cardFeatures, cardFragment) {
     cardFeatures.forEach((feature) => {
@@ -112,6 +113,7 @@
   };
 
   window.card = {
+    map,
     open,
     close,
   };

@@ -85,7 +85,7 @@
     '100': [`0`],
   };
 
-  const setAllowedCapacity = function () {
+  const setAllowedCapacity = () => {
     let roomsAmount = addRoomsAmount.value;
     let guestsAmount = addGuestsAmount.querySelectorAll(`option`);
     guestsAmount.forEach((option) => {
@@ -108,5 +108,6 @@
 
   window.form = {
     addForm,
+    setAllowedCapacity,
   };
 })();

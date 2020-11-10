@@ -1,36 +1,51 @@
 'use strict';
 (function () {
-  const map = document.querySelector(`.map`);
-  const mapFilter = document.querySelector(`.map__filters`);
+  const MAX_AMOUNT_PINS = 5;
+  const ANY_VALUE = `any`;
+  const {create} = window.pin;
+  const {close, map} = window.card;
+  const {pinsArea} = window.starterPin;
+  const mapFilter = map.querySelector(`.map__filters`);
   const mapFilterSelects = mapFilter.querySelectorAll(`select`);
   const mapFilterInputs = mapFilter.querySelectorAll(`input`);
 
-  const onError = function (errorMessage) {
-    const error = document.createElement(`div`);
-    error.style = `z-index: 100; margin: auto; text-align: center`;
-    error.style.backgroundColor = `#ff5635`;
-    error.style.color = `white`;
-    error.style.height = `115px`;
-    error.style.width = `800px`;
-    error.style.paddingTop = `15px`;
-    error.style.paddingBottom = `40px`;
-    error.style.position = `absolute`;
-    error.style.top = `150px`;
-    error.style.left = 0;
-    error.style.right = 0;
-    error.style.fontSize = `30px`;
-    error.textContent = errorMessage;
-    error.style.cursor = `pointer`;
-    document.body.insertAdjacentElement(`afterbegin`, error);
-    error.addEventListener(`click`, () => {
-      error.remove();
+  const erasePins = () => {
+    const priorPins = document.querySelectorAll(`.map__pin:not(.map__pin--main)`);
+    priorPins.forEach((pin) => {
+      pin.remove();
     });
   };
+
+  let blurbs;
+  const onLoad = (data) => {
+    blurbs = data;
+    renewBlurbs(data);
+  };
+
+  const renewBlurbs = (data) => {
+    erasePins();
+    pinsArea.append(create(data.slice(0, MAX_AMOUNT_PINS)));
+  };
+
+  const accomodationType = document.querySelector(`#housing-type`);
+  let accomodationTypeValue = ` `;
+  accomodationType.addEventListener(`change`, () => {
+    accomodationTypeValue = accomodationType.value;
+    let newBlurbs = [];
+    blurbs.forEach((item) => {
+      if (accomodationTypeValue === ANY_VALUE || item.offer.type === accomodationTypeValue) {
+        newBlurbs.push(item);
+      }
+    });
+    close();
+    renewBlurbs(newBlurbs);
+  });
 
   window.map = {
     map,
     mapFilterSelects,
     mapFilterInputs,
-    onError,
+    erasePins,
+    onLoad,
   };
 })();
