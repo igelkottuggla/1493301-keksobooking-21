@@ -19,10 +19,6 @@ const KeysForPrices = {
   HIGH: `high`,
 };
 
-const LOW_PRICE = KeysForPrices.LOW;
-const MIDDLE_PRICE = KeysForPrices.MIDDLE;
-const HIGH_PRICE = KeysForPrices.HIGH;
-
 const accomodationType = filter.querySelector(`#housing-type`);
 const accomodationPrice = filter.querySelector(`#housing-price`);
 const accomodationRooms = filter.querySelector(`#housing-rooms`);
