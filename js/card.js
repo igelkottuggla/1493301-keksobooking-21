@@ -2,7 +2,7 @@
 (function () {
   const {isEscEvent} = window.util;
   const map = document.querySelector(`.map`);
-
+  const mapFilterContainer = document.querySelector(`.map__filters-container`);
 
   const makeFeatures = function (cardFeatures, cardFragment) {
     cardFeatures.forEach((feature) => {
@@ -67,8 +67,7 @@
         8: ``,
         9: ``,
       };
-      let result = (ending >= 5 && ending <= 20) ? `` : endings[lastFigure];
-      return result;
+      return (ending >= 5 && ending <= 20) ? `` : endings[lastFigure];
     };
 
     const guestsWordsEndings = function (ending) {
@@ -76,8 +75,8 @@
       if (ending >= 10) {
         lastFigure = ending % 10;
       }
-      let result = (lastFigure === 1) ? `я` : `ей`;
-      return result;
+
+      return (lastFigure === 1) ? `я` : `ей`;
     };
 
     cardElement.querySelector(`.popup__title`).textContent = title;
@@ -89,7 +88,6 @@
     cardElement.querySelector(`.popup__description`).textContent = description;
     renderPhotos(cardElement, photos);
     cardElement.querySelector(`.popup__avatar`).src = avatar;
-    const mapFilterContainer = document.querySelector(`.map__filters-container`);
     map.insertBefore(cardElement, mapFilterContainer);
     return cardElement;
   };
@@ -116,5 +114,6 @@
     map,
     open,
     close,
+    mapFilterContainer,
   };
 })();

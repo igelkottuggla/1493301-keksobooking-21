@@ -3,7 +3,7 @@
   const GET_FROM_URL = `https://21.javascript.pages.academy/keksobooking/data`;
   const POST_TO_URL = `https://21.javascript.pages.academy/keksobooking`;
   const TIMEOUT = 10000;
-  const statusCode = {
+  const StatusCode = {
     OK: 200,
   };
 
@@ -12,7 +12,7 @@
     xhr.responseType = `json`;
 
     xhr.addEventListener(`load`, () => {
-      if (xhr.status === statusCode.OK) {
+      if (xhr.status === StatusCode.OK) {
         makeLoad(xhr.response);
       } else {
         showError(`Статус ответа: ${xhr.status} ${xhr.statusText}`);

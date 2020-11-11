@@ -28,8 +28,8 @@
   };
 
   const getRandomLocation = function () {
-    const locationX = getRandomNumber(1, 1000); // 600
-    const locationY = getRandomNumber(1, 1000); // 350
+    const locationX = getRandomNumber(1, 1000);
+    const locationY = getRandomNumber(1, 1000);
     return `${locationX}, ${locationY}`;
   };
 
@@ -50,6 +50,7 @@
     error.textContent = errorMessage;
     error.style.cursor = `pointer`;
     document.body.insertAdjacentElement(`afterbegin`, error);
+
     error.addEventListener(`click`, () => {
       error.remove();
     });
