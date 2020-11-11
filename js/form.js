@@ -5,7 +5,7 @@
   const minTitleLength = addTitle.minLength;
 
 
-  addTitle.addEventListener(`input`, () => {
+  const onAddTitleSetCustomValidity = () => {
     let valueLength = addTitle.value.length;
     if (valueLength < minTitleLength) {
       addTitle.setCustomValidity(`Минимальная длина — 30 символов, ещё ${minTitleLength - valueLength}`);
@@ -13,7 +13,7 @@
       addTitle.setCustomValidity(``);
     }
     addTitle.reportValidity();
-  });
+  };
 
   const addPrice = addForm.querySelector(`#price`);
 
@@ -27,13 +27,13 @@
     }
   };
 
-  addPrice.addEventListener(`invalid`, () => {
+  const onInvalidAddPriceCheckValidity = () => {
     validatePrice();
-  });
+  };
 
-  addPrice.addEventListener(`input`, () => {
+  const onInputAddPriceCheckValidity = () => {
     validatePrice();
-  });
+  };
 
   const typeCorrToPrice = {
     bungalow: 0,
@@ -51,10 +51,10 @@
   let minPrice = typeCorrToPrice[accomodationType.value];
   setMinPrice(minPrice);
 
-  accomodationType.addEventListener(`change`, () => {
+  const onChangeAccomodationType = () => {
     minPrice = typeCorrToPrice[accomodationType.value];
     setMinPrice(minPrice);
-  });
+  };
 
   const checkIn = addForm.querySelector(`#timein`);
   const checkOut = addForm.querySelector(`#timeout`);
@@ -67,13 +67,13 @@
     checkOut.value = value;
   };
 
-  checkIn.addEventListener(`change`, () => {
+  const onChangeCheckIn = () => {
     changeCheckOut(checkIn.value);
-  });
+  };
 
-  checkOut.addEventListener(`change`, () => {
+  const onChangeCheckOut = () => {
     changeCheckIn(checkOut.value);
-  });
+  };
 
   const addRoomsAmount = addForm.querySelector(`#room_number`);
   const addGuestsAmount = addForm.querySelector(`#capacity`);
@@ -102,12 +102,26 @@
 
   setAllowedCapacity();
 
-  addRoomsAmount.addEventListener(`change`, () => {
+  const onChangeAddRoomsAmount = () => {
     setAllowedCapacity();
-  });
+  };
 
   window.form = {
     addForm,
+
+    addTitle,
+    addPrice,
+    checkOut,
+    checkIn,
+    accomodationType,
     setAllowedCapacity,
+    addRoomsAmount,
+    onAddTitleSetCustomValidity,
+    onInvalidAddPriceCheckValidity,
+    onInputAddPriceCheckValidity,
+    onChangeAccomodationType,
+    onChangeCheckIn,
+    onChangeCheckOut,
+    onChangeAddRoomsAmount,
   };
 })();

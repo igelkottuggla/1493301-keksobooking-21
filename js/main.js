@@ -1,13 +1,14 @@
 'use strict';
 (function () {
   const MOUSE_MAIN_BUTTON = 0;
-  const {mapFilterSelects, mapFilterInputs, erasePins, onLoad} = window.map;
+  const {mapFilterSelects, mapFilterInputs, erasePins, onLoad, mapFilter, onFilterGetBlurbs} = window.map;
   const {addForm, setAllowedCapacity} = window.form;
   const {assignAddress, mainPin, PIN_INCEPTION_X, PIN_INCEPTION_Y, setMainPinPosition} = window.starterPin;
-  const {close, map} = window.card;
+  const {close, map, mapFilterContainer} = window.card;
   const {isEnterEvent, isEscEvent, onError} = window.util;
   const {onStarterPinMouseMove} = window.dragging;
   const {load, upload} = window.server;
+  const {addTitle, addPrice, checkIn, checkOut, accomodationType, addRoomsAmount, onAddTitleSetCustomValidity, onInvalidAddPriceCheckValidity, onInputAddPriceCheckValidity, onChangeAccomodationType, onChangeCheckIn, onChangeCheckOut, onChangeAddRoomsAmount} = window.form;
 
   const formSelects = addForm.querySelectorAll(`select`);
   const formInputs = addForm.querySelectorAll(`input`);
@@ -25,6 +26,8 @@
       element.removeAttribute(`disabled`, `true`);
     });
   };
+
+  mapFilterContainer.classList.add(`hidden`);
 
   imposeDisabled(formSelects);
   imposeDisabled(formInputs);
@@ -115,10 +118,20 @@
     imposeDisabled(mapFilterInputs);
     imposeDisabled(formSelects);
     imposeDisabled(formInputs);
+    mapFilterContainer.classList.add(`hidden`);
     formTextArea.setAttribute(`disabled`, `true`);
     formSubmit.setAttribute(`disabled`, `true`);
     mainPin.addEventListener(`mousedown`, onMainPinMouseButtonClick);
     resetButton.removeEventListener(`click`, resetForm);
+
+    mapFilter.removeEventListener(`change`, onFilterGetBlurbs);
+    addTitle.removeEventListener(`input`, onAddTitleSetCustomValidity);
+    addPrice.removeEventListener(`input`, onInputAddPriceCheckValidity);
+    addPrice.removeEventListener(`invalid`, onInvalidAddPriceCheckValidity);
+    accomodationType.removeEventListener(`change`, onChangeAccomodationType);
+    checkIn.removeEventListener(`change`, onChangeCheckIn);
+    checkOut.removeEventListener(`change`, onChangeCheckOut);
+    addRoomsAmount.removeEventListener(`change`, onChangeAddRoomsAmount);
   };
 
   mainPin.addEventListener(`mousedown`, onMainPinMouseButtonClick);
@@ -128,6 +141,7 @@
   const activateWholePage = () => {
     addForm.classList.remove(`ad-form--disabled`);
     map.classList.remove(`map--faded`);
+    mapFilterContainer.classList.remove(`hidden`);
     imposeActive(formSelects);
     imposeActive(formInputs);
     imposeActive(mapFilterSelects);
@@ -151,5 +165,14 @@
     mainPin.removeEventListener(`keydown`, onMainPinPressEnter);
     mainPin.removeEventListener(`mousedown`, onMainPinMouseButtonClick);
     resetButton.addEventListener(`click`, resetForm);
+
+    mapFilter.addEventListener(`change`, onFilterGetBlurbs);
+    addTitle.addEventListener(`input`, onAddTitleSetCustomValidity);
+    addPrice.addEventListener(`input`, onInputAddPriceCheckValidity);
+    addPrice.addEventListener(`invalid`, onInvalidAddPriceCheckValidity);
+    accomodationType.addEventListener(`change`, onChangeAccomodationType);
+    checkIn.addEventListener(`change`, onChangeCheckIn);
+    checkOut.addEventListener(`change`, onChangeCheckOut);
+    addRoomsAmount.addEventListener(`change`, onChangeAddRoomsAmount);
   };
 })();

@@ -28,7 +28,7 @@
   };
 
   const getRandomLocation = function () {
-    const locationX = getRandomNumber(1, 1000); // 600
+    const locationX = getRandomNumber(1, 1000);
     const locationY = getRandomNumber(1, 1000); // 350
     return `${locationX}, ${locationY}`;
   };
