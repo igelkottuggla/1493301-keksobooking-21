@@ -87,7 +87,7 @@ const makeCard = function (data) {
   cardElement.querySelector(`.popup__description`).textContent = description;
   renderPhotos(cardElement, photos);
   cardElement.querySelector(`.popup__avatar`).src = avatar;
-  map.insertBefore(cardElement, сontainer);
+  map.insertBefore(cardElement, container);
   return cardElement;
 };
 
