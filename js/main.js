@@ -1,12 +1,11 @@
 'use strict';
 (function () {
   const MOUSE_MAIN_BUTTON = 0;
-  const {map, mapFilterSelects, mapFilterInputs, onError} = window.map;
-  const {addForm} = window.form;
-  const {assignAddress, mainPin, pinsArea, PIN_INCEPTION_X, PIN_INCEPTION_Y, setMainPinPosition} = window.starterPin;
-  const {close} = window.card;
-  const {create} = window.pin;
-  const {isEnterEvent, isEscEvent} = window.util;
+  const {mapFilterSelects, mapFilterInputs, erasePins, onLoad} = window.map;
+  const {addForm, setAllowedCapacity} = window.form;
+  const {assignAddress, mainPin, PIN_INCEPTION_X, PIN_INCEPTION_Y, setMainPinPosition} = window.starterPin;
+  const {close, map} = window.card;
+  const {isEnterEvent, isEscEvent, onError} = window.util;
   const {onStarterPinMouseMove} = window.dragging;
   const {load, upload} = window.server;
 
@@ -33,13 +32,6 @@
   imposeDisabled(mapFilterInputs);
   formTextArea.setAttribute(`disabled`, `true`);
   formSubmit.setAttribute(`disabled`, `true`);
-
-  function erasePins() {
-    const priorPins = document.querySelectorAll(`.map__pin:not(.map__pin--main)`);
-    priorPins.forEach((pin) => {
-      pin.remove();
-    });
-  }
 
   const onMainPinMouseButtonClick = function (evt) {
     if (evt.button === MOUSE_MAIN_BUTTON) {
@@ -71,8 +63,7 @@
   };
 
   const shutBanner = () => {
-    const successMessage = document.querySelector(`.success`);
-    successMessage.remove();
+    success.remove();
 
     document.removeEventListener(`click`, onBannerSuccessClick);
     document.removeEventListener(`keydown`, onBannerSuccessKeyDown);
@@ -97,8 +88,7 @@
   };
 
   const shutBannerError = function () {
-    const message = document.querySelector(`.error`);
-    message.remove();
+    error.remove();
 
     document.removeEventListener(`click`, onBannerErrorClick);
     document.removeEventListener(`keydown`, onBannerErrorKeyDown);
@@ -106,7 +96,7 @@
 
   const resetButton = document.querySelector(`.ad-form__reset`);
 
-  const resetForm = function () {
+  const resetForm = () => {
     deactivateWholePage();
   };
 
@@ -114,6 +104,7 @@
     close();
     erasePins();
     addForm.reset();
+    setAllowedCapacity();
     map.classList.add(`map--faded`);
     addForm.classList.add(`ad-form--disabled`);
     assignAddress();
@@ -143,20 +134,18 @@
     imposeActive(mapFilterInputs);
     formTextArea.removeAttribute(`disabled`, `true`);
     formSubmit.removeAttribute(`disabled`, `true`);
-    load((data) => {
-      pinsArea.append(create(data));
-    }, onError);
     assignAddress();
+    load(onLoad, onError);
 
     addForm.addEventListener(`submit`, (evt) => {
+      evt.preventDefault();
       const data = new FormData(addForm);
-      const onLoad = () => {
+      upload(data, () => {
         deactivateWholePage();
         showSuccessReport();
-      };
-
-      upload(data, onLoad, showErrorMessage);
-      evt.preventDefault();
+      },
+      showErrorMessage);
+      document.activeElement.blur();
     });
 
     mainPin.removeEventListener(`keydown`, onMainPinPressEnter);
