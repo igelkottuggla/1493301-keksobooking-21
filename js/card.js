@@ -67,7 +67,7 @@
         8: ``,
         9: ``,
       };
-      return (ending >= 5 && ending <= 20) ? `` : endings[lastFigure];;
+      return (ending >= 5 && ending <= 20) ? `` : endings[lastFigure];
     };
 
     const guestsWordsEndings = function (ending) {
@@ -76,7 +76,7 @@
         lastFigure = ending % 10;
       }
 
-      return (lastFigure === 1) ? `я` : `ей`;;
+      return (lastFigure === 1) ? `я` : `ей`;
     };
 
     cardElement.querySelector(`.popup__title`).textContent = title;
