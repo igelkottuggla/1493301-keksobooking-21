@@ -7,6 +7,7 @@ const {closeBlurb, map, container} = window.card;
 const {isEnterEvent, isEscEvent, onError} = window.util;
 const {onStarterPinMouseMove} = window.dragging;
 const {load, upload} = window.server;
+const {makePhotosEnabled, makePhotosDisabled} = window.images;
 const {addTitle, addPrice, checkIn, checkOut, accomodationType, addRoomsAmount, onAddTitleSetCustomValidity, onInvalidAddPriceCheckValidity, onInputAddPriceCheckValidity, onChangeAccomodationType, onChangeCheckIn, onChangeCheckOut, onChangeAddRoomsAmount} = window.form;
 
 const formSelects = addForm.querySelectorAll(`select`);
@@ -131,6 +132,7 @@ const deactivateWholePage = function () {
   checkIn.removeEventListener(`change`, onChangeCheckIn);
   checkOut.removeEventListener(`change`, onChangeCheckOut);
   addRoomsAmount.removeEventListener(`change`, onChangeAddRoomsAmount);
+  makePhotosDisabled();
 };
 
 mainPin.addEventListener(`mousedown`, onMainPinMouseButtonClick);
@@ -173,4 +175,5 @@ const activateWholePage = () => {
   checkIn.addEventListener(`change`, onChangeCheckIn);
   checkOut.addEventListener(`change`, onChangeCheckOut);
   addRoomsAmount.addEventListener(`change`, onChangeAddRoomsAmount);
+  makePhotosEnabled();
 };

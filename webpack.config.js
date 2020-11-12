@@ -9,6 +9,7 @@ module.exports = {
     "./js/card.js",
     "./js/pin.js",
     "./js/debounce.js",
+    "./js/images.js",
     "./js/map.js",
     "./js/dragging.js",
     "./js/main.js",
