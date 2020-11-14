@@ -1,6 +1,6 @@
 'use strict';
 const {isEscEvent} = window.util;
-const map = document.querySelector(`.map`);
+const chart = document.querySelector(`.map`);
 const container = document.querySelector(`.map__filters-container`);
 
 const makeFeatures = function (cardFeatures, cardFragment) {
@@ -12,7 +12,7 @@ const makeFeatures = function (cardFeatures, cardFragment) {
   return cardFragment;
 };
 
-const makeCard = function (data) {
+const makeCard = (data) => {
   const cardTemplate = document.querySelector(`#card`).content;
   const cardElement = cardTemplate.cloneNode(true);
   const cardFragment = document.createDocumentFragment();
@@ -20,7 +20,7 @@ const makeCard = function (data) {
   const {avatar} = data.author;
   const closeButton = cardElement.querySelector(`.popup__close`);
   closeButton.addEventListener(`click`, () => {
-    closeBlurb();
+    shutBlurb();
   });
 
   const cardFeaturesContainer = cardElement.querySelector(`.popup__features`);
@@ -49,7 +49,7 @@ const makeCard = function (data) {
   };
   cardType.textContent = accomodationTypes[type];
 
-  const roomsWordsEndings = function (ending) {
+  const roomsWordsEndings = (ending) => {
     let lastFigure = ending;
     if (ending > 20) {
       lastFigure = ending % 10;
@@ -69,7 +69,7 @@ const makeCard = function (data) {
     return (ending >= 5 && ending <= 20) ? `` : endings[lastFigure];
   };
 
-  const guestsWordsEndings = function (ending) {
+  const guestsWordsEndings = (ending) => {
     let lastFigure = ending;
     if (ending >= 10) {
       lastFigure = ending % 10;
@@ -87,22 +87,22 @@ const makeCard = function (data) {
   cardElement.querySelector(`.popup__description`).textContent = description;
   renderPhotos(cardElement, photos);
   cardElement.querySelector(`.popup__avatar`).src = avatar;
-  map.insertBefore(cardElement, container);
+  chart.insertBefore(cardElement, container);
   return cardElement;
 };
 
 const showBlurb = (item) => {
-  closeBlurb();
+  shutBlurb();
   makeCard(item);
   document.addEventListener(`keydown`, onCardEscClick);
 };
 
 const onCardEscClick = (evt) => {
-  isEscEvent(evt, closeBlurb);
+  isEscEvent(evt, shutBlurb);
 };
 
-const closeBlurb = () => {
-  const card = map.querySelector(`.map__card`);
+const shutBlurb = () => {
+  const card = chart.querySelector(`.map__card`);
   if (card) {
     card.remove();
   }
@@ -110,8 +110,8 @@ const closeBlurb = () => {
 };
 
 window.card = {
-  map,
+  chart,
   showBlurb,
-  closeBlurb,
+  shutBlurb,
   container,
 };

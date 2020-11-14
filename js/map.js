@@ -2,9 +2,9 @@
 const MAX_AMOUNT_PINS = 5;
 const ANY_VALUE = `any`;
 const {create} = window.pin;
-const {closeBlurb, map} = window.card;
+const {shutBlurb, chart} = window.card;
 const {pinsArea} = window.starterPin;
-const filter = map.querySelector(`.map__filters`);
+const filter = chart.querySelector(`.map__filters`);
 const selects = filter.querySelectorAll(`select`);
 const inputs = filter.querySelectorAll(`input`);
 
@@ -56,7 +56,7 @@ const onFilterGetBlurbs = () => {
     }
   });
 
-  closeBlurb();
+  shutBlurb();
   renewBlurbs(newBlurbs);
 };
 
@@ -82,7 +82,7 @@ const filterAccomodationFeatures = (blurb) => {
 
 
 window.map = {
-  map,
+  chart,
   selects,
   inputs,
   erasePins,

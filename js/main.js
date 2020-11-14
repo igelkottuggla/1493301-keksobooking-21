@@ -1,26 +1,26 @@
 'use strict';
 const MOUSE_MAIN_BUTTON = 0;
 const {selects, inputs, erasePins, onLoad, filter, onFilterGetBlurbs} = window.map;
-const {addForm, setAllowedCapacity} = window.form;
 const {assignAddress, mainPin, PIN_INCEPTION_X, PIN_INCEPTION_Y, setMainPinPosition} = window.starterPin;
-const {closeBlurb, map, container} = window.card;
+const {shutBlurb, chart, container} = window.card;
 const {isEnterEvent, isEscEvent, onError} = window.util;
 const {onStarterPinMouseMove} = window.dragging;
 const {load, upload} = window.server;
-const {addTitle, addPrice, checkIn, checkOut, accomodationType, addRoomsAmount, onAddTitleSetCustomValidity, onInvalidAddPriceCheckValidity, onInputAddPriceCheckValidity, onChangeAccomodationType, onChangeCheckIn, onChangeCheckOut, onChangeAddRoomsAmount} = window.form;
+const {clearPhotos} = window.images;
+const {template, setAllowedCapacity, addTitle, addPrice, checkIn, checkOut, accomodationType, addRoomsAmount, onAddTitleSetCustomValidity, onInvalidAddPriceCheckValidity, onInputAddPriceCheckValidity, onChangeAccomodationType, onChangeCheckIn, onChangeCheckOut, onChangeAddRoomsAmount} = window.form;
 
-const formSelects = addForm.querySelectorAll(`select`);
-const formInputs = addForm.querySelectorAll(`input`);
-const formTextArea = addForm.querySelector(`#description`);
-const formSubmit = addForm.querySelector(`.ad-form__element--submit`);
+const formSelects = template.querySelectorAll(`select`);
+const formInputs = template.querySelectorAll(`input`);
+const formTextArea = template.querySelector(`#description`);
+const formSubmit = template.querySelector(`.ad-form__element--submit`);
 
-const imposeDisabled = function (elements) {
+const imposeDisabled = (elements) => {
   elements.forEach((element) => {
     element.setAttribute(`disabled`, `true`);
   });
 };
 
-const imposeActive = function (elements) {
+const imposeActive = (elements) => {
   elements.forEach((element) => {
     element.removeAttribute(`disabled`, `true`);
   });
@@ -35,7 +35,7 @@ imposeDisabled(inputs);
 formTextArea.setAttribute(`disabled`, `true`);
 formSubmit.setAttribute(`disabled`, `true`);
 
-const onMainPinMouseButtonClick = function (evt) {
+const onMainPinMouseButtonClick = (evt) => {
   if (evt.button === MOUSE_MAIN_BUTTON) {
     activateWholePage();
   }
@@ -45,7 +45,7 @@ const successTemplate = document.querySelector(`#success`).content.querySelector
 const success = successTemplate.cloneNode(true);
 
 const showSuccessReport = () => {
-  map.appendChild(success);
+  chart.appendChild(success);
 
   document.addEventListener(`click`, onBannerSuccessClick);
   document.addEventListener(`keydown`, onBannerSuccessKeyDown);
@@ -74,22 +74,22 @@ const shutBanner = () => {
 const errorTemplate = document.querySelector(`#error`).content.querySelector(`.error`);
 const error = errorTemplate.cloneNode(true);
 
-const showErrorMessage = function () {
-  map.appendChild(error);
+const showErrorMessage = () => {
+  chart.appendChild(error);
 
   document.addEventListener(`click`, onBannerErrorClick);
   document.addEventListener(`keydown`, onBannerErrorKeyDown);
 };
 
-const onBannerErrorClick = function () {
+const onBannerErrorClick = () => {
   shutBannerError();
 };
 
-const onBannerErrorKeyDown = function (evt) {
+const onBannerErrorKeyDown = (evt) => {
   isEscEvent(evt, shutBannerError);
 };
 
-const shutBannerError = function () {
+const shutBannerError = () => {
   error.remove();
 
   document.removeEventListener(`click`, onBannerErrorClick);
@@ -98,18 +98,20 @@ const shutBannerError = function () {
 
 const resetButton = document.querySelector(`.ad-form__reset`);
 
-const resetForm = () => {
+const resetForm = (evt) => {
+  evt.preventDefault();
   deactivateWholePage();
 };
 
-const deactivateWholePage = function () {
-  closeBlurb();
+const deactivateWholePage = () => {
+  shutBlurb();
   erasePins();
-  addForm.reset();
+  template.reset();
   setAllowedCapacity();
-  map.classList.add(`map--faded`);
-  addForm.classList.add(`ad-form--disabled`);
+  chart.classList.add(`map--faded`);
+  template.classList.add(`ad-form--disabled`);
   assignAddress();
+  onChangeAccomodationType();
   mainPin.style.left = `${PIN_INCEPTION_X}px`;
   mainPin.style.top = `${PIN_INCEPTION_Y}px`;
   setMainPinPosition();
@@ -117,6 +119,7 @@ const deactivateWholePage = function () {
   imposeDisabled(inputs);
   imposeDisabled(formSelects);
   imposeDisabled(formInputs);
+
   container.classList.add(`hidden`);
   formTextArea.setAttribute(`disabled`, `true`);
   formSubmit.setAttribute(`disabled`, `true`);
@@ -131,6 +134,7 @@ const deactivateWholePage = function () {
   checkIn.removeEventListener(`change`, onChangeCheckIn);
   checkOut.removeEventListener(`change`, onChangeCheckOut);
   addRoomsAmount.removeEventListener(`change`, onChangeAddRoomsAmount);
+  clearPhotos();
 };
 
 mainPin.addEventListener(`mousedown`, onMainPinMouseButtonClick);
@@ -138,21 +142,21 @@ mainPin.addEventListener(`keydown`, onMainPinPressEnter);
 mainPin.addEventListener(`mousedown`, onStarterPinMouseMove);
 
 const activateWholePage = () => {
-  addForm.classList.remove(`ad-form--disabled`);
-  map.classList.remove(`map--faded`);
+  template.classList.remove(`ad-form--disabled`);
+  chart.classList.remove(`map--faded`);
   container.classList.remove(`hidden`);
   imposeActive(formSelects);
   imposeActive(formInputs);
   imposeActive(selects);
   imposeActive(inputs);
-  formTextArea.removeAttribute(`disabled`, `true`);
-  formSubmit.removeAttribute(`disabled`, `true`);
+  formTextArea.removeAttribute(`disabled`);
+  formSubmit.removeAttribute(`disabled`);
   assignAddress();
   load(onLoad, onError);
 
-  addForm.addEventListener(`submit`, (evt) => {
+  template.addEventListener(`submit`, (evt) => {
     evt.preventDefault();
-    const data = new FormData(addForm);
+    const data = new FormData(template);
     upload(data, () => {
       deactivateWholePage();
       showSuccessReport();

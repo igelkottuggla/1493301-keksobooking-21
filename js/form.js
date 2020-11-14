@@ -1,11 +1,11 @@
 'use strict';
-const addForm = document.querySelector(`.ad-form`);
-const addTitle = addForm.querySelector(`#title`);
+const template = document.querySelector(`.ad-form`);
+const addTitle = template.querySelector(`#title`);
 const minTitleLength = addTitle.minLength;
 
 
 const onAddTitleSetCustomValidity = () => {
-  let valueLength = addTitle.value.length;
+  const valueLength = addTitle.value.length;
   if (valueLength < minTitleLength) {
     addTitle.setCustomValidity(`Минимальная длина — 30 символов, ещё ${minTitleLength - valueLength}`);
   } else {
@@ -14,7 +14,7 @@ const onAddTitleSetCustomValidity = () => {
   addTitle.reportValidity();
 };
 
-const addPrice = addForm.querySelector(`#price`);
+const addPrice = template.querySelector(`#price`);
 
 const validatePrice = () => {
   if (addPrice.validity.rangeUnderflow) {
@@ -41,12 +41,12 @@ const typeCorrToPrice = {
   palace: 10000,
 };
 
-const setMinPrice = function (minPrice) {
+const setMinPrice = (minPrice) => {
   addPrice.setAttribute(`min`, minPrice);
   addPrice.setAttribute(`placeholder`, minPrice);
 };
 
-const accomodationType = addForm.querySelector(`#type`);
+const accomodationType = template.querySelector(`#type`);
 let minPrice = typeCorrToPrice[accomodationType.value];
 setMinPrice(minPrice);
 
@@ -55,8 +55,10 @@ const onChangeAccomodationType = () => {
   setMinPrice(minPrice);
 };
 
-const checkIn = addForm.querySelector(`#timein`);
-const checkOut = addForm.querySelector(`#timeout`);
+onChangeAccomodationType();
+
+const checkIn = template.querySelector(`#timein`);
+const checkOut = template.querySelector(`#timeout`);
 
 const changeCheckIn = (value) => {
   checkIn.value = value;
@@ -74,8 +76,8 @@ const onChangeCheckOut = () => {
   changeCheckIn(checkOut.value);
 };
 
-const addRoomsAmount = addForm.querySelector(`#room_number`);
-const addGuestsAmount = addForm.querySelector(`#capacity`);
+const addRoomsAmount = template.querySelector(`#room_number`);
+const addGuestsAmount = template.querySelector(`#capacity`);
 
 const capacityRelevance = {
   '1': [`1`],
@@ -88,11 +90,7 @@ const setAllowedCapacity = () => {
   let roomsAmount = addRoomsAmount.value;
   let guestsAmount = addGuestsAmount.querySelectorAll(`option`);
   guestsAmount.forEach((option) => {
-    if (capacityRelevance[roomsAmount].indexOf(option.value) === -1) {
-      option.disabled = true;
-    } else {
-      option.disabled = false;
-    }
+    option.disabled = capacityRelevance[roomsAmount].indexOf(option.value) === -1;
   });
   if (guestsAmount[addGuestsAmount.selectedIndex].disabled) {
     addGuestsAmount.querySelector(`option:not([disabled])`).selected = true;
@@ -106,8 +104,7 @@ const onChangeAddRoomsAmount = () => {
 };
 
 window.form = {
-  addForm,
-
+  template,
   addTitle,
   addPrice,
   checkOut,

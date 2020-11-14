@@ -13,28 +13,11 @@ const isEnterEvent = (evt, cb) => {
   }
 };
 
-const getRandomNumber = function (min, max) {
-  return Math.floor(min + Math.random() * (max + 1 - min));
-};
-
-
-const getRandomItem = function (arr) {
-  return arr[getRandomNumber(0, arr.length - 1)];
-};
-
-const getRandomArray = function (array) {
-  return array.slice(getRandomNumber(0, array.length));
-};
-
-const getRandomLocation = function () {
-  const locationX = getRandomNumber(1, 1000);
-  const locationY = getRandomNumber(1, 1000);
-  return `${locationX}, ${locationY}`;
-};
-
 const onError = (errorMessage) => {
   const error = document.createElement(`div`);
-  error.style = `z-index: 100; margin: auto; text-align: center`;
+  error.style = `z-index: 100`;
+  error.style.margin = `auto`;
+  error.style.textAlign = `center`;
   error.style.backgroundColor = `#ff5635`;
   error.style.color = `white`;
   error.style.height = `115px`;
@@ -58,9 +41,5 @@ const onError = (errorMessage) => {
 window.util = {
   isEscEvent,
   isEnterEvent,
-  getRandomNumber,
-  getRandomItem,
-  getRandomArray,
-  getRandomLocation,
   onError,
 };
