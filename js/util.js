@@ -13,24 +13,40 @@ const isEnterEvent = (evt, cb) => {
   }
 };
 
+const roomsWordsEndings = (ending) => {
+  let lastFigure = ending;
+  if (ending > 20) {
+    lastFigure = ending % 10;
+  }
+  const endings = {
+    0: ``,
+    1: `а`,
+    2: `ы`,
+    3: `ы`,
+    4: `ы`,
+    5: ``,
+    6: ``,
+    7: ``,
+    8: ``,
+    9: ``,
+  };
+  return (ending >= 5 && ending <= 20) ? `` : endings[lastFigure];
+};
+
+const guestsWordsEndings = (ending) => {
+  let lastFigure = ending;
+  if (ending >= 10) {
+    lastFigure = ending % 10;
+  }
+
+  return (lastFigure === 1) ? `я` : `ей`;
+};
+
+
 const onError = (errorMessage) => {
   const error = document.createElement(`div`);
-  error.style = `z-index: 100`;
-  error.style.margin = `auto`;
-  error.style.textAlign = `center`;
-  error.style.backgroundColor = `#ff5635`;
-  error.style.color = `white`;
-  error.style.height = `115px`;
-  error.style.width = `800px`;
-  error.style.paddingTop = `15px`;
-  error.style.paddingBottom = `40px`;
-  error.style.position = `absolute`;
-  error.style.top = `150px`;
-  error.style.left = 0;
-  error.style.right = 0;
-  error.style.fontSize = `30px`;
   error.textContent = errorMessage;
-  error.style.cursor = `pointer`;
+  error.classList.add(`error-message`);
   document.body.insertAdjacentElement(`afterbegin`, error);
 
   error.addEventListener(`click`, () => {
@@ -42,4 +58,6 @@ window.util = {
   isEscEvent,
   isEnterEvent,
   onError,
+  roomsWordsEndings,
+  guestsWordsEndings,
 };

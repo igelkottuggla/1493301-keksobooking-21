@@ -6,7 +6,7 @@ const StatusCode = {
   OK: 200,
 };
 
-const createRequest = function (makeLoad, showError) {
+const createRequest = (makeLoad, showError) => {
   const xhr = new XMLHttpRequest();
   xhr.responseType = `json`;
 

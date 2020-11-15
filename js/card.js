@@ -1,21 +1,50 @@
 'use strict';
-const {isEscEvent} = window.util;
+const {isEscEvent, roomsWordsEndings, guestsWordsEndings} = window.util;
+
+const accomodationTypes = {
+  flat: `Квартира`,
+  bungalow: `Бунгало`,
+  house: `Дом`,
+  palace: `Дворец`,
+};
+
 const chart = document.querySelector(`.map`);
 const container = document.querySelector(`.map__filters-container`);
+const cardFragment = document.createDocumentFragment();
+const cardTemplate = document.querySelector(`#card`).content;
 
-const makeFeatures = function (cardFeatures, cardFragment) {
+const makeFeatures = (cardFeatures, cardFragments) => {
   cardFeatures.forEach((feature) => {
     const featureElement = document.createElement(`li`);
     featureElement.className = `popup__feature popup__feature--${feature}`;
-    cardFragment.appendChild(featureElement);
+    cardFragments.appendChild(featureElement);
   });
-  return cardFragment;
+  return cardFragments;
 };
 
+const renderPhotos = (popupPhotos, photosCard) => {
+  const cardPhotos = popupPhotos.querySelector(`.popup__photos`);
+  const cardPhoto = cardPhotos.querySelector(`.popup__photo`);
+
+  cardPhotos.innerHTML = ``;
+  photosCard.forEach((photo) => {
+    const newCardPhoto = cardPhoto.cloneNode(true);
+    newCardPhoto.src = photo;
+    cardFragment.appendChild(newCardPhoto);
+  });
+
+  cardPhotos.appendChild(cardFragment);
+};
+
+const nodesChekingVoid = cardTemplate.querySelectorAll(`.map__card > *:not(button):not(img)`);
+nodesChekingVoid.forEach((node) => {
+  if (!node.innerHTML) {
+    node.remove();
+  }
+});
+
 const makeCard = (data) => {
-  const cardTemplate = document.querySelector(`#card`).content;
   const cardElement = cardTemplate.cloneNode(true);
-  const cardFragment = document.createDocumentFragment();
   const {title, address, price, type, rooms, guests, checkin, checkout, features, description, photos} = data.offer;
   const {avatar} = data.author;
   const closeButton = cardElement.querySelector(`.popup__close`);
@@ -26,58 +55,8 @@ const makeCard = (data) => {
   const cardFeaturesContainer = cardElement.querySelector(`.popup__features`);
   cardFeaturesContainer.innerHTML = ``;
 
-  const renderPhotos = (popupPhotos, photosCard) => {
-    const cardPhotos = popupPhotos.querySelector(`.popup__photos`);
-    const cardPhoto = cardPhotos.querySelector(`.popup__photo`);
-
-    cardPhotos.innerHTML = ``;
-    photosCard.forEach((photo) => {
-      const newCardPhoto = cardPhoto.cloneNode(true);
-      newCardPhoto.src = photo;
-      cardFragment.appendChild(newCardPhoto);
-    });
-
-    cardPhotos.appendChild(cardFragment);
-  };
-
   const cardType = cardElement.querySelector(`.popup__type`);
-  const accomodationTypes = {
-    flat: `квартира`,
-    bungalow: `бунгало`,
-    house: `дом`,
-    palace: `дворец`,
-  };
   cardType.textContent = accomodationTypes[type];
-
-  const roomsWordsEndings = (ending) => {
-    let lastFigure = ending;
-    if (ending > 20) {
-      lastFigure = ending % 10;
-    }
-    const endings = {
-      0: ``,
-      1: `а`,
-      2: `ы`,
-      3: `ы`,
-      4: `ы`,
-      5: ``,
-      6: ``,
-      7: ``,
-      8: ``,
-      9: ``,
-    };
-    return (ending >= 5 && ending <= 20) ? `` : endings[lastFigure];
-  };
-
-  const guestsWordsEndings = (ending) => {
-    let lastFigure = ending;
-    if (ending >= 10) {
-      lastFigure = ending % 10;
-    }
-
-    return (lastFigure === 1) ? `я` : `ей`;
-  };
-
   cardElement.querySelector(`.popup__title`).textContent = title;
   cardElement.querySelector(`.popup__text--address`).textContent = address;
   cardElement.querySelector(`.popup__text--price`).textContent = `${price}₽/ночь`;
@@ -87,6 +66,7 @@ const makeCard = (data) => {
   cardElement.querySelector(`.popup__description`).textContent = description;
   renderPhotos(cardElement, photos);
   cardElement.querySelector(`.popup__avatar`).src = avatar;
+
   chart.insertBefore(cardElement, container);
   return cardElement;
 };
