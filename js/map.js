@@ -4,9 +4,6 @@ const ANY_VALUE = `any`;
 const {create} = window.pin;
 const {shutBlurb, chart} = window.card;
 const {pinsArea} = window.starterPin;
-const filter = chart.querySelector(`.map__filters`);
-const selects = filter.querySelectorAll(`select`);
-const inputs = filter.querySelectorAll(`input`);
 
 const PriceRange = {
   MIDDLE: 10000,
@@ -19,6 +16,9 @@ const KeysForPrices = {
   HIGH: `high`,
 };
 
+const filter = chart.querySelector(`.map__filters`);
+const selects = filter.querySelectorAll(`select`);
+const inputs = filter.querySelectorAll(`input`);
 const accomodationType = filter.querySelector(`#housing-type`);
 const accomodationPrice = filter.querySelector(`#housing-price`);
 const accomodationRooms = filter.querySelector(`#housing-rooms`);
@@ -45,7 +45,7 @@ const renewBlurbs = window.debounce((data) => {
 
 const onFilterGetBlurbs = () => {
   const newBlurbs = [];
-  blurbs.forEach((blurb) => {
+  for (const blurb of blurbs) {
     if (filterAccomodationType(blurb) &&
       filterAccomodationPrice(blurb) &&
       filterAccomodationRooms(blurb) &&
@@ -53,9 +53,11 @@ const onFilterGetBlurbs = () => {
       filterAccomodationFeatures(blurb)
     ) {
       newBlurbs.push(blurb);
+      if (newBlurbs.length === window.pin.PIN_LIMIT) {
+        break;
+      }
     }
-  });
-
+  }
   shutBlurb();
   renewBlurbs(newBlurbs);
 };
@@ -79,7 +81,6 @@ const filterAccomodationFeatures = (blurb) => {
 
   return Array.from(checkedFeatures).every((checkedFeature) => blurb.offer.features.includes(checkedFeature.value));
 };
-
 
 window.map = {
   chart,

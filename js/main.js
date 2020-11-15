@@ -98,8 +98,7 @@ const shutBannerError = () => {
 
 const resetButton = document.querySelector(`.ad-form__reset`);
 
-const resetForm = (evt) => {
-  evt.preventDefault();
+const resetForm = () => {
   deactivateWholePage();
 };
 
@@ -108,9 +107,9 @@ const deactivateWholePage = () => {
   erasePins();
   template.reset();
   setAllowedCapacity();
+  filter.reset();
   chart.classList.add(`map--faded`);
   template.classList.add(`ad-form--disabled`);
-  assignAddress();
   onChangeAccomodationType();
   mainPin.style.left = `${PIN_INCEPTION_X}px`;
   mainPin.style.top = `${PIN_INCEPTION_Y}px`;

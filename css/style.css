@@ -1141,6 +1141,24 @@ fieldset {
  * Сообщения об успешном и неуспешном создании объявления
  */
 
+.error-message {
+  position: absolute;
+  z-index: 30;
+  margin: auto;
+  text-align: center;
+  background-color: #ff5635;
+  font-size: 30px;
+  color: #ffffff;
+  padding-top: 15px;
+  padding-bottom: 40px;
+  height: 115px;
+  width: 800px;
+  top: 150px;
+  left: 0;
+  right: 0;
+  cursor: pointer;
+}
+
 .success,
 .error {
   position: fixed;

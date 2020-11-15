@@ -1,10 +1,6 @@
 'use strict';
 const {template} = window.form;
 const FILE_EXTENSIONS = [`gif`, `jpg`, `jpeg`, `png`];
-const avatarPhotoInput = template.querySelector(`.ad-form__field input[type=file]`);
-const avatarPhotoPreview = template.querySelector(`.ad-form-header__preview img`);
-const accomodationPhotoInput = template.querySelector(`.ad-form__upload input[type=file]`);
-const accomodationPhotoPreview = template.querySelector(`.ad-form__photo`);
 const DEFAULT_AVATAR = `img/muffin-grey.svg`;
 const PHOTO_DESCRIPTION = `Фотография Вашего жилья`;
 
@@ -24,6 +20,11 @@ const stylesForPreview = {
     },
   }
 };
+
+const avatarPhotoInput = template.querySelector(`.ad-form__field input[type=file]`);
+const avatarPhotoPreview = template.querySelector(`.ad-form-header__preview img`);
+const accomodationPhotoInput = template.querySelector(`.ad-form__upload input[type=file]`);
+const accomodationPhotoPreview = template.querySelector(`.ad-form__photo`);
 
 const imposeStyle = (photos, styles) => {
   photos.style.width = styles.width;
@@ -58,12 +59,14 @@ const onChangeAvatarPhoto = () => {
 };
 
 const onChangeAccomodationPhoto = () => {
-  const picture = document.createElement(`img`);
-  picture.style.width = `100%`;
-  picture.style.height = `100%`;
-  picture.style.borderRadius = `5px`;
-  picture.alt = PHOTO_DESCRIPTION;
-  accomodationPhotoPreview.appendChild(picture);
+  if (!accomodationPhotoPreview.querySelector(`img`)) {
+    const picture = document.createElement(`img`);
+    picture.style.width = `100%`;
+    picture.style.height = `100%`;
+    picture.style.borderRadius = `5px`;
+    picture.alt = PHOTO_DESCRIPTION;
+    accomodationPhotoPreview.appendChild(picture);
+  }
   const photoPreview = template.querySelector(`.ad-form__photo img`);
   getPhotos(accomodationPhotoInput, photoPreview);
 };
@@ -73,7 +76,9 @@ const clearPhotos = () => {
   imposeStyle(avatarPhotoPreview, defaultStyles);
   avatarPhotoPreview.style.marginLeft = defaultStyles.marginLeft;
   avatarPhotoPreview.src = DEFAULT_AVATAR;
-  accomodationPhotoPreview.firstChild.remove();
+  if (accomodationPhotoPreview.querySelector(`img`)) {
+    accomodationPhotoPreview.firstChild.remove();
+  }
 };
 
 avatarPhotoInput.addEventListener(`change`, onChangeAvatarPhoto);
