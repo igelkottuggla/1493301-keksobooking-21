@@ -10,8 +10,8 @@ const accomodationTypes = {
 
 const chart = document.querySelector(`.map`);
 const container = document.querySelector(`.map__filters-container`);
-const cardFragment = document.createDocumentFragment();
 const cardTemplate = document.querySelector(`#card`).content;
+const cardFragment = document.createDocumentFragment();
 
 const makeFeatures = (cardFeatures, cardFragments) => {
   cardFeatures.forEach((feature) => {
@@ -36,13 +36,6 @@ const renderPhotos = (popupPhotos, photosCard) => {
   cardPhotos.appendChild(cardFragment);
 };
 
-const nodesChekingVoid = cardTemplate.querySelectorAll(`.map__card > *:not(button):not(img)`);
-nodesChekingVoid.forEach((node) => {
-  if (!node.innerHTML) {
-    node.remove();
-  }
-});
-
 const makeCard = (data) => {
   const cardElement = cardTemplate.cloneNode(true);
   const {title, address, price, type, rooms, guests, checkin, checkout, features, description, photos} = data.offer;
@@ -66,6 +59,13 @@ const makeCard = (data) => {
   cardElement.querySelector(`.popup__description`).textContent = description;
   renderPhotos(cardElement, photos);
   cardElement.querySelector(`.popup__avatar`).src = avatar;
+
+  const nodesCheсkingVoid = cardTemplate.querySelectorAll(`.map__card > *:not(button):not(img)`);
+  nodesCheсkingVoid.forEach((node) => {
+    if (!node.innerHTML) {
+      node.remove();
+    }
+  });
 
   chart.insertBefore(cardElement, container);
   return cardElement;
