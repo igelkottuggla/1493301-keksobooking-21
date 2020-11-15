@@ -1,14 +1,14 @@
 'use strict';
-const {PIN_WIDTH, PIN_HEIGHT, assignAddress, locationXMax, mainPin} = window.starterPin;
-const {map} = window.map;
+const {PIN_WIDTH, PIN_HEIGHT, assignAddress, pinsArea, mainPin} = window.starterPin;
+const {chart} = window.map;
 
 const TOP_CURB = 130;
 const BOTTOM_CURB = 630;
 const LEFT_CURB = 0;
-const RIGHT_CURB = locationXMax;
+const RIGHT_CURB = pinsArea.offsetWidth;
 
 const restrictions = {
-  top: map.offsetTop + TOP_CURB - PIN_HEIGHT,
+  top: chart.offsetTop + TOP_CURB - PIN_HEIGHT,
   bottom: BOTTOM_CURB - PIN_HEIGHT,
   left: LEFT_CURB + Math.ceil(PIN_WIDTH / 2) - mainPin.offsetWidth,
   right: RIGHT_CURB + Math.ceil(PIN_WIDTH / 2) - mainPin.offsetWidth,
@@ -52,7 +52,9 @@ const onStarterPinMouseMove = (evt) => {
   };
 
   const onPinUp = (upEvt) => {
-    upEvt.preventDefault();
+    if (evt.button === 1) {
+      upEvt.preventDefault();
+    }
 
     document.removeEventListener(`mousemove`, onMouseMotion);
     document.removeEventListener(`mouseup`, onPinUp);

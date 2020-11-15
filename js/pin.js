@@ -1,5 +1,5 @@
 'use strict';
-const {openBlurb} = window.card;
+const {showBlurb} = window.card;
 
 const create = (data) => {
   const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
@@ -16,7 +16,7 @@ const create = (data) => {
 
     fragment.append(element);
     element.addEventListener(`click`, () => {
-      openBlurb(item);
+      showBlurb(item);
     });
   });
 

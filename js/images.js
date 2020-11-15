@@ -1,14 +1,12 @@
 'use strict';
-const {addForm} = window.form;
-const DEFAULT_AVATAR = `img/muffin-grey.svg`;
+const {template} = window.form;
 const FILE_EXTENSIONS = [`gif`, `jpg`, `jpeg`, `png`];
+const avatarPhotoInput = template.querySelector(`.ad-form__field input[type=file]`);
+const avatarPhotoPreview = template.querySelector(`.ad-form-header__preview img`);
+const accomodationPhotoInput = template.querySelector(`.ad-form__upload input[type=file]`);
+const accomodationPhotoPreview = template.querySelector(`.ad-form__photo`);
+const DEFAULT_AVATAR = `img/muffin-grey.svg`;
 const PHOTO_DESCRIPTION = `Фотография Вашего жилья`;
-
-const avatarPhotoInput = addForm.querySelector(`#avatar`);
-const accomodationPhotoInput = addForm.querySelector(`#images`);
-const avatarPhotoPreview = addForm.querySelector(`.ad-form-header__preview img`);
-const accomodationPhotoContainer = addForm.querySelector(`.ad-form__photo-container`);
-const accomodationPhotoBlock = accomodationPhotoContainer.querySelector(`.ad-form__photo`);
 
 const stylesForPreview = {
   images: {
@@ -27,97 +25,60 @@ const stylesForPreview = {
   }
 };
 
-const pickUpFile = (file, upload) => {
+const imposeStyle = (photos, styles) => {
+  photos.style.width = styles.width;
+  photos.style.height = styles.height;
+  photos.style.borderRadius = styles.borderRadius;
+};
+
+const getPhotos = (fileInputs, previewPhoto) => {
+  const file = fileInputs.files[0];
   const fileName = file.name.toLowerCase();
 
-  const approved = FILE_EXTENSIONS.some((ending) => fileName.endsWith(ending));
+  const approved = FILE_EXTENSIONS.some((it) => {
+    return fileName.endsWith(it);
+  });
 
   if (approved) {
-    upload(file);
+    const reader = new FileReader();
+
+    reader.addEventListener(`load`, () => {
+      previewPhoto.src = reader.result;
+    });
+
+    reader.readAsDataURL(file);
   }
 };
 
-const imposeStyle = (element, styles) => {
-  element.setAttribute(`width`, styles.width);
-  element.setAttribute(`height`, styles.height);
-
-  element.style.width = styles.width;
-  element.style.height = styles.height;
-  element.style.borderRadius = styles.borderRadius;
-  element.style.objectFit = `cover`;
-};
-
-const uploadUserAvatar = (file) => {
+const onChangeAvatarPhoto = () => {
   const amendedStyles = stylesForPreview.images.edited;
-
-  const onUploadAvatar = () => {
-    URL.revokeObjectURL(avatarPhotoPreview.src);
-    avatarPhotoPreview.removeEventListener(`load`, onUploadAvatar);
-  };
-
-  avatarPhotoPreview.addEventListener(`load`, onUploadAvatar);
-  avatarPhotoPreview.src = URL.createObjectURL(file);
-
   imposeStyle(avatarPhotoPreview, amendedStyles);
   avatarPhotoPreview.style.marginLeft = amendedStyles.marginLeft;
-};
-
-const uploadAccomodationPhoto = (fileName) => {
-  const divElement = document.createElement(`div`);
-  divElement.classList.add(`ad-form__photo`);
-  accomodationPhotoContainer.appendChild(divElement);
-  const imageElement = document.createElement(`img`);
-  const amendedStyles = stylesForPreview.images.edited;
-
-  const onUploadAccomodationPhoto = () => {
-    URL.revokeObjectURL(imageElement.src);
-    imageElement.removeEventListener(`load`, onUploadAccomodationPhoto);
-  };
-
-  imageElement.addEventListener(`load`, onUploadAccomodationPhoto);
-  imageElement.src = URL.createObjectURL(fileName);
-
-  imposeStyle(imageElement, amendedStyles);
-  imageElement.setAttribute(`alt`, PHOTO_DESCRIPTION);
-
-  accomodationPhotoBlock.remove();
-  divElement.appendChild(imageElement);
-};
-
-const onChangeAvatar = () => {
-  pickUpFile(avatarPhotoInput.files[0], uploadUserAvatar);
+  getPhotos(avatarPhotoInput, avatarPhotoPreview);
 };
 
 const onChangeAccomodationPhoto = () => {
-  pickUpFile(accomodationPhotoInput.files[0], uploadAccomodationPhoto);
+  const picture = document.createElement(`img`);
+  picture.style.width = `100%`;
+  picture.style.height = `100%`;
+  picture.style.borderRadius = `5px`;
+  picture.alt = PHOTO_DESCRIPTION;
+  accomodationPhotoPreview.appendChild(picture);
+  const photoPreview = template.querySelector(`.ad-form__photo img`);
+  getPhotos(accomodationPhotoInput, photoPreview);
 };
 
-const makePhotosEnabled = () => {
-  avatarPhotoInput.addEventListener(`change`, onChangeAvatar);
-  accomodationPhotoInput.addEventListener(`change`, onChangeAccomodationPhoto);
-};
-
-const makePhotosDisabled = () => {
+const clearPhotos = () => {
   const defaultStyles = stylesForPreview.images.default;
-
-  avatarPhotoPreview.style.width = defaultStyles.width;
-  avatarPhotoPreview.style.height = defaultStyles.height;
-  avatarPhotoPreview.style.borderRadius = defaultStyles.borderRadius;
+  imposeStyle(avatarPhotoPreview, defaultStyles);
   avatarPhotoPreview.style.marginLeft = defaultStyles.marginLeft;
   avatarPhotoPreview.src = DEFAULT_AVATAR;
-
-  const photoContainers = addForm.querySelectorAll(`.ad-form__photo`);
-  photoContainers.forEach((container) => {
-    container.remove();
-  });
-
-  accomodationPhotoContainer.appendChild(accomodationPhotoBlock);
-
-  avatarPhotoInput.removeEventListener(`change`, onChangeAvatar);
-  accomodationPhotoInput.removeEventListener(`change`, onChangeAccomodationPhoto);
+  accomodationPhotoPreview.firstChild.remove();
 };
 
+avatarPhotoInput.addEventListener(`change`, onChangeAvatarPhoto);
+accomodationPhotoInput.addEventListener(`change`, onChangeAccomodationPhoto);
+
 window.images = {
-  makePhotosDisabled,
-  makePhotosEnabled,
+  clearPhotos,
 };
