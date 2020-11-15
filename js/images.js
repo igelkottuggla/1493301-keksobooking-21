@@ -73,7 +73,6 @@ const clearPhotos = () => {
   imposeStyle(avatarPhotoPreview, defaultStyles);
   avatarPhotoPreview.style.marginLeft = defaultStyles.marginLeft;
   avatarPhotoPreview.src = DEFAULT_AVATAR;
-  const photoPreview = template.querySelector(`.ad-form__photo img`);
   accomodationPhotoPreview.firstChild.remove();
 };
 
